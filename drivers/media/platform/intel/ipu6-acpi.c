@@ -38,6 +38,7 @@
 #include <media/ipu-acpi-pdata.h>
 #include <media/ipu-acpi.h>
 #include <media/ar0234.h>
+#include <media/tevs.h>
 #include <media/lt6911uxc.h>
 #include <media/imx390.h>
 #include <media/isx031.h>
@@ -69,6 +70,7 @@ static const struct ipu_acpi_devices supported_devices[] = {
 	{ "INTC1031", ISX031_NAME, get_sensor_pdata, NULL, 0, TYPE_SERDES, TI960_NAME },// ISX031 HID
 	{ "INTC10C5", LT6911UXE_NAME, get_sensor_pdata, NULL, 0, TYPE_DIRECT, NULL },   // LT6911UXE HID
 	{ "INTC10CD", D457_NAME, get_sensor_pdata, NULL, 0, TYPE_SERDES, D457_NAME },// D457 HID
+	{ "TN_TEVS", TEVS_NAME, get_sensor_pdata, NULL, 0, TYPE_DIRECT, TEVS_NAME },// TN_TEVS HID
 };
 
 static int get_table_index(struct device *device, const __u8 *acpi_name)
@@ -95,6 +97,7 @@ static const struct acpi_device_id ipu_acpi_match[] = {
 	{ "INTC1031", 0 },	// ISX031 HID
 	{ "INTC10C5", 0 },	// LT6911UXE HID
 	{ "INTC10CD", 0 },	// D457 HID
+	{ "TN_TEVS", 0},    // TechNexion TEVS HID
 	{},
 };
 static int ipu_acpi_get_pdata(struct i2c_client *client,

@@ -15,6 +15,7 @@
 
 #include <media/ipu-acpi.h>
 #include <media/ipu-acpi-pdata.h>
+#include <linux/gpio.h>
 
 #define MIN_SENSOR_I2C 1
 #define MIN_SERDES_I2C 3
@@ -525,6 +526,30 @@ static void set_lt_gpio(struct control_logic_data *ctl_data, struct sensor_platf
 	}
 }
 
+static void set_tevs_gpio(struct control_logic_data *ctl_data,
+			struct sensor_platform_data **pdata)
+{
+	int i;
+
+	(*pdata)->reset_pin = -1;
+
+	if (ctl_data->completed && ctl_data->gpio_num > 0) {
+		for (i = 0; i < ctl_data->gpio_num; i++) {
+			/* check for unsupported GPIO function */
+			if (ctl_data->gpio[i].func != GPIO_RESET)
+				dev_err(ctl_data->dev,
+					"IPU6 ACPI: Invalid GPIO func: %d\n",
+					ctl_data->gpio[i].func);
+
+			/* check for RESET selection in BIOS */
+			if (ctl_data->gpio[i].valid && ctl_data->gpio[i].func == GPIO_RESET) {
+				(*pdata)->reset_pin = ctl_data->gpio[i].pin;
+				gpio_direction_output((*pdata)->reset_pin, 1);
+			}
+		}
+	}
+}
+
 static void set_common_gpio(struct control_logic_data *ctl_data,
 		     struct sensor_platform_data **pdata)
 {
@@ -704,6 +729,8 @@ static int set_pdata(struct ipu_isys_subdev_info **sensor_sd,
 		/* gpio */
 		if (!strcmp(sensor_name, LT6911UXC_NAME) || !strcmp(sensor_name, LT6911UXE_NAME))
 			set_lt_gpio(ctl_data, &pdata, is_dummy);
+		if (!strcmp(sensor_name, TEVS_NAME))
+			set_tevs_gpio(ctl_data, &pdata);
 		else
 			set_common_gpio(ctl_data, &pdata);
 

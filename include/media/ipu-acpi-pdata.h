@@ -3,6 +3,7 @@
 #include <linux/interrupt.h>
 #include <media/ipu-acpi.h>
 #include <media/ar0234.h>
+#include <media/tevs.h>
 #include <media/lt6911uxc.h>
 #include <media/lt6911uxe.h>
 #include <media/ti960.h>
