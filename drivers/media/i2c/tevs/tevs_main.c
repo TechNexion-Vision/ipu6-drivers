@@ -1957,10 +1957,10 @@ static int tevs_probe(struct i2c_client *client)
 	v4l2_i2c_subdev_init(&tevs->v4l2_subdev, client, &tevs_subdev_ops);
 
 
-	if (tevs->platform_data->suffix)
-		snprintf(tevs->v4l2_subdev.name,
-				sizeof(tevs->v4l2_subdev.name), "tevs %c",
-				tevs->platform_data->suffix);
+	// if (tevs->platform_data->suffix)
+	// 	snprintf(tevs->v4l2_subdev.name,
+	// 			sizeof(tevs->v4l2_subdev.name), "tevs %c",
+	// 			tevs->platform_data->suffix);
 
 	gpio_set_value(tevs->platform_data->reset_pin, 0);
 	msleep(TEVS_BOOT_TIME);
